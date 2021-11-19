@@ -3128,3 +3128,79 @@ function checkAdrCount(adr_num) {
     }
 
 }
+
+function getCalculatrDate(year, month, date) {
+    const today = new Date();
+    const nextDate = new Date( today.getFullYear()+year, today.getMonth()+month, today.getDate() + date);
+    return Number(nextDate.toISOString().substring(0,10).replace(/-/g,''));
+}
+
+console.log(getCalculatrDate(0,+3,0));
+
+function checkSerialNumber(){
+
+    const answers = [];
+    const order_list = [];
+
+//{"start_dt":"2021년 06월 25일 등록 건","finish_dt":"20260625","itm_cd":"SLTE0150","serial_no":"I202106242001000010010000","itm_nm":"[택배]토퍼_프리미엄 Q_2020","auth_yn":"Y","ctm_cd":"2021062402685001","ctm_ci":"","com_brd":"T60I03","orm_hdphone":"010-0000-0000","orm_cdt":"20210625","orm_no":"I20210624200100"}
+    try{
+        var result = checkSerialResultCode("T60I03","ccsj4hjzTQpASYun/40Z+umZKHJz/CRo0kt7fvkr/0RmsWmvgzDje5hruoGUoZMgfmz6FKBGx9HChD+rfrlPiA==","010-7318-2113","20210601","20210901")
+        for (var i = 0; i < result.length; i++) {
+
+            var start_dt = result[i]['start_dt']
+            var finish_dt = result[i]['finish_dt']
+            var itm_cd = result[i]['itm_cd']
+            var serial_no = result[i]['serial_no']
+            var itm_nm = result[i]['itm_nm']
+            var auth_yn = result[i]['auth_yn']
+            var ctm_cd = result[i]['ctm_cd']
+
+            var ctm_ci = result[i]['ctm_ci']
+            var com_brd = result[i]['com_brd']
+            var orm_hdphone = result[i]['orm_hdphone']
+            var orm_cdt = result[i]['orm_cdt']
+            var orm_no = result[i]['orm_no']
+
+            order_list.push(createCardFormat(
+                '',
+                'return : '+serial_no+'\n'+ itm_cd,
+                '',
+                []
+            ));
+        }
+
+        answers.push(createCarousel(order_list));
+
+    }catch(e){
+        order_list = "api 호출 실패"
+        log(order_list)
+        log(e)
+
+    }
+    if(serialNo !== '' || isNaN(serialNo) || serialNo !== null){
+        for(var i = 0; i < 10; i++){
+            return answer
+        }
+    }else{
+        return "미수집"
+    }
+}
+
+
+function createCarousel(cards) {
+    if (!Array.isArray(cards)) {
+        return
+    }
+
+    for (var i in cards) {
+        if (cards[i] && 'cardFormat' in cards[i]) {
+            cards[i] = cards[i]['cardFormat']
+        }
+    }
+
+    return {
+        carouselFormat: {
+            cards: cards
+        }
+    }
+}
